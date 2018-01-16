@@ -8,7 +8,7 @@ var connectHandler = function connected() {
     eventEmitter.emit('data_received');
 }
 
-eventEmitter.on('connection', connectHandler());
+eventEmitter.on('connection', connectHandler);
 
 eventEmitter.on('data_received', function () {
     console.log('数据库链接成功。');
