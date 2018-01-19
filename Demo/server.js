@@ -13,24 +13,50 @@
 // console.log('Server running at http:127.0.0.1:8888/');
 
 
-var http = require("http");
-var url = require("url");
+// var http = require("http");
+// var url = require("url");
+//
+// function start(route) {
+//     function onRequest(request, response) {
+//         var pathname = url.parse(request.url).pathname;
+//         console.log("Request for " + pathname + " received.");
+//
+//         route(pathname);
+//
+//         response.writeHead(200, {"Content-Type": "text/plain"});
+//         response.write("Hello World");
+//         response.end();
+//     }
+//
+//     http.createServer(onRequest).listen(8888);
+//     console.log("Server has started.");
+// }
+//
+// exports.start = start;
 
-function start(route) {
-    function onRequest(request, response) {
-        var pathname = url.parse(request.url).pathname;
-        console.log("Request for " + pathname + " received.");
+var http = require('http');
+var fs = require('fs');
+var url = require('url');
 
-        route(pathname);
+http.createServer(function (request, response) {
+    // 输出请求的文件名
+    var pathname = url.parse(request.url).pathname;
+    console.log("Request for " + pathname + " received");
 
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("Hello World");
+    // 从文件系统中读取请求的文件内容
+    fs.readFile(pathname.substr(1), function (err, data) {
+        if (err) {
+            console.log(err);
+            response.writeHead(404, {'Content-Type': 'text/html'});
+        } else {
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.write(data.toString())
+        }
+
         response.end();
-    }
+    });
 
-    http.createServer(onRequest).listen(8888);
-    console.log("Server has started.");
-}
+}).listen(8080);
 
-exports.start = start;
+console.log('Server running at http://127.0.0.1:8080/');
 
